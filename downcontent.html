@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Get Content</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/login.css">
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js"></script>
+    
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-analytics.js"></script>
+    
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-firestore.js"></script>
+    
+    
+    <div class="container">
+        <div class="row">
+            <div id="login-req">
+                <h4>Click on the below button to view the content. <br> You will need to login with the Google Account that you use in the classroom </h4>
+                <button type="button" class="google-button" id="google-login-btn">
+                    <span class="google-button__icon">
+                        <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg"><path d="M125.9 10.2c40.2-13.9 85.3-13.6 125.3 1.1 22.2 8.2 42.5 21 59.9 37.1-5.8 6.3-12.1 12.2-18.1 18.3l-34.2 34.2c-11.3-10.8-25.1-19-40.1-23.6-17.6-5.3-36.6-6.1-54.6-2.2-21 4.5-40.5 15.5-55.6 30.9-12.2 12.3-21.4 27.5-27 43.9-20.3-15.8-40.6-31.5-61-47.3 21.5-43 60.1-76.9 105.4-92.4z" id="Shape" fill="#EA4335"/><path d="M20.6 102.4c20.3 15.8 40.6 31.5 61 47.3-8 23.3-8 49.2 0 72.4-20.3 15.8-40.6 31.6-60.9 47.3C1.9 232.7-3.8 189.6 4.4 149.2c3.3-16.2 8.7-32 16.2-46.8z" id="Shape" fill="#FBBC05"/><path d="M361.7 151.1c5.8 32.7 4.5 66.8-4.7 98.8-8.5 29.3-24.6 56.5-47.1 77.2l-59.1-45.9c19.5-13.1 33.3-34.3 37.2-57.5H186.6c.1-24.2.1-48.4.1-72.6h175z" id="Shape" fill="#4285F4"/><path d="M81.4 222.2c7.8 22.9 22.8 43.2 42.6 57.1 12.4 8.7 26.6 14.9 41.4 17.9 14.6 3 29.7 2.6 44.4.1 14.6-2.6 28.7-7.9 41-16.2l59.1 45.9c-21.3 19.7-48 33.1-76.2 39.6-31.2 7.1-64.2 7.3-95.2-1-24.6-6.5-47.7-18.2-67.6-34.1-20.9-16.6-38.3-38-50.4-62 20.3-15.7 40.6-31.5 60.9-47.3z" fill="#34A853"/></svg>
+                    </span>
+                    <span class="google-button__text">View Content</span>
+                </button>
+            </div>
+            <div id="already-loggedin">
+                <h4>You are logged in as <span class="user-name"></span></h4>
+                <h5><a href="#" id="logout_btn">Click here to logout</a></h5>
+                
+                <div id="content-loader">
+                    <h4>Your content is being loaded. Please Wait</h4>
+                    <div class="col-sm-6 text-center"><p>loader 5</p>
+                        <div class="loader5"></div></div>
+                    </div>
+                </div>
+                
+                <div id="content-load-error" class="error-msg">
+                    <i class="fa fa-times-circle"></i>
+                    Sorry. Either this content does not exist or you are not allowed to access this content
+                </div>
+            </div>
+            
+            <div class="col-sm-6 text-center" id="loading-loader"><h4>Just a moment</h4><div class="loader3">
+                <span></span>
+                <span></span>
+                
+            </div></div>
+        </div>
+    </div>
+    <script>
+        const login_btn = document.getElementById("google-login-btn");
+        const logout_btn = document.getElementById("logout_btn");
+        const loggedinbox = document.getElementById('already-loggedin');
+        const notloggedinbox = document.getElementById('login-req');
+        const user_name_spans = document.getElementsByClassName('user-name');
+        const loading_loader = document.getElementById("loading-loader");
+        const content_loader = document.getElementById("content-loader");
+        const content_load_error = document.getElementById("content-load-error");
+        let globalUser = null;
+        // TODO: Replace the following with your app's Firebase project configuration
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        
+        function get_content_from_server(){
+            console.log("Getting from server")
+            const content = getParameterByName('content');
+            const instance = axios.create({
+                baseURL: 'http://127.0.0.1:8000',
+                timeout: 10000,
+            });
+            console.log(content, axios)
+            
+            
+            try{
+                
+                instance.post('/download/', {
+                    uuid: globalUser.uid,
+                    content_slug: content
+                })
+                .then(function (response) {
+                    window.setTimeout(function(){
+                    url = response.data.url;
+                    window.location.href=url;
+                    }, 4500);
+                })
+                .catch(function (error) {
+                    console.log("Error", error.status);
+                    content_loader.style.display="none";
+                    content_load_error.style.display="block";
+                });
+            } catch (err) {
+                content_load_error.style.display="block"
+            }
+            
+        }
+        
+        var firebaseConfig = {
+            apiKey: "AIzaSyBwAH2UZqUQbogLamgb46aRhPc4qTKxmno",
+            authDomain: "econtent-download-tracker.firebaseapp.com",
+            databaseURL: "https://econtent-download-tracker.firebaseio.com",
+            projectId: "econtent-download-tracker",
+            storageBucket: "econtent-download-tracker.appspot.com",
+            messagingSenderId: "393878399911",
+            appId: "1:393878399911:web:4f08fb7f85f74b84e5a482",
+            measurementId: "G-HSEZVY8TL0"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        
+        var provider = new firebase.auth.GoogleAuthProvider();
+        
+        
+        firebase.auth().getRedirectResult().then(function(result) {
+            if (result.credential) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = result.credential.accessToken;
+                // ...
+            }
+            // The signed-in user info.
+            user = result.user;
+            console.log(user)
+            console.log(token)
+            
+            if (user) {
+                console.log("ALready Logged In")
+                loggedinbox.style.display="block";
+                console.log(user_name_spans);
+                for (uns of user_name_spans){
+                    console.log(uns)
+                    uns.innerHTML = user.displayName;
+                }
+                
+                loading_loader.style.display="none";  
+                globalUser = user;
+                get_content_from_server();      
+            }
+            else {
+                console.log("User not defined")
+                
+                notloggedinbox.style.display="block"
+                loading_loader.style.display="none";        
+                
+            }
+        }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        }); 
+        
+        login_btn.addEventListener("click", function(){
+            firebase.auth().signInWithRedirect(provider);
+        });
+        
+        logout_btn.addEventListener("click", function(){
+            firebase.auth().signOut().then(function() {
+                window.location.reload();
+                // Sign-out successful.
+            }).catch(function(error) {
+                // An error happened.
+                window.location.reload();
+                
+            });
+        })
+        
+        
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+</body>
+</html>

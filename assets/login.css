@@ -1,0 +1,190 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+
+.google-button {
+    height: 40px;
+    border-width: 0;
+    background: white;
+    color: #737373;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.05);
+    -webkit-transition-property: background-color, box-shadow;
+    transition-property: background-color, box-shadow;
+    -webkit-transition-duration: 150ms;
+            transition-duration: 150ms;
+    -webkit-transition-timing-function: ease-in-out;
+            transition-timing-function: ease-in-out;
+    padding: 0;
+  }
+  .google-button:focus, .google-button:hover {
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
+  }
+  .google-button:active {
+    background-color: #e5e5e5;
+    box-shadow: none;
+    -webkit-transition-duration: 10ms;
+            transition-duration: 10ms;
+  }
+  
+  .google-button__icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 8px 0 8px 8px;
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+  }
+  
+  .google-button__icon--plus {
+    width: 27px;
+  }
+  
+  .google-button__text {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Roboto',arial,sans-serif;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+  
+  body {
+    background-color: #f0f0f0;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+            justify-content: center;
+  }
+  
+  button ~ button {
+    margin-left: 20px;
+  }
+
+  .loader {
+    width:50px;
+    height:50px;
+    display:inline-block;
+    padding:0px;
+    opacity:0.5;
+    border:3px solid #09acfd;
+    -webkit-animation: loader 1s ease-in-out infinite alternate;
+    animation: loader 1s ease-in-out infinite alternate;
+ }
+ 
+ .loader:before {
+   content: " ";
+   position: absolute;
+   z-index: -1;
+   top: 5px;
+   left: 5px;
+   right: 5px;
+   bottom: 5px;
+   border: 3px solid #09acfd;
+ }
+ 
+ .loader:after {
+   content: " ";
+   position: absolute;
+   z-index: -1;
+   top: 15px;
+   left: 15px;
+   right: 15px;
+   bottom: 15px;
+   border: 3px solid #09acfd;
+ }
+ 
+ @keyframes loader {
+    from {transform: rotate(0deg) scale(1,1);border-radius:0px;}
+    to {transform: rotate(360deg) scale(0, 0);border-radius:50px;}
+ }
+ @-webkit-keyframes loader {
+    from {-webkit-transform: rotate(0deg) scale(1, 1);border-radius:0px;}
+    to {-webkit-transform: rotate(360deg) scale(0,0 );border-radius:50px;}
+ }
+ 
+
+ .loader3 {
+  width:50px;
+  height:50px;
+  display:inline-block;
+  padding:0px;
+  text-align:left;
+}
+.loader3 span {
+  position:absolute;
+  display:inline-block;
+  width:50px;
+  height:50px;
+  border-radius:100%;
+  background:rgba(135, 211, 124,1);
+  -webkit-animation:loader3 1.5s linear infinite;
+  animation:loader3 1.5s linear infinite;
+}
+.loader3 span:last-child {
+  animation-delay:-0.9s;
+  -webkit-animation-delay:-0.9s;
+}
+@keyframes loader3 {
+  0% {transform: scale(0, 0);opacity:0.8;}
+  100% {transform: scale(1, 1);opacity:0;}
+}
+@-webkit-keyframes loader3 {
+  0% {-webkit-transform: scale(0, 0);opacity:0.8;}
+  100% {-webkit-transform: scale(1, 1);opacity:0;}
+}
+
+.loader5 {
+  display:inline-block;
+  width: 0;
+	height:0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #4183D7;
+  border-top: 10px solid #F5AB35;
+   -webkit-animation: loader5 1.2s ease-in-out infinite alternate;
+   animation: loader5 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes loader5 {
+   from {transform: rotate(0deg);}
+   to {transform: rotate(720deg);}
+}
+@-webkit-keyframes loader5 {
+   from {-webkit-transform: rotate(0deg);}
+   to {-webkit-transform: rotate(720deg);}
+}
+
+.info-msg,
+.success-msg,
+.warning-msg,
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.error-msg {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+#login-req {
+    display: none
+}
+
+#already-loggedin{
+    display: none
+}
+
+#content-load-error {
+  display: none;
+}
+/* #loading-loader {
+  display: none;
+} */
